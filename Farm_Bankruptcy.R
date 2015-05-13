@@ -12,12 +12,12 @@ library(httr)
 ######################################################################################################
 ### Load in historical data
 #  Time series
-bkrpt.series =read.table("e:/temp/bnkrpt_history.txt")
+bkrpt.series =read.table("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/bnkrpt_history.txt")
 colnames(bkrpt.series) = c("Year", "Farms" ,"Sharecroppers", "FarmslessChare", "BankruptcyFiled",
                            "Bkrptpertenthou", "BkrptpertenthouExcl")
 # Regional Chapter 12
 # Appendix table 2--Chapter 12 farmer bankruptcy case filings by farm production region, 1986-2002
-reg.ch12= read.table("e:/temp/reg_ch12.txt")
+reg.ch12= read.table("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/Reg_ch12.txt")
 colnames(reg.ch12) = c("Year", " Northeast " ,"Lake States", "Corn Belt", "Northern Plains",
                        "Appalachian", "Southeast", "Delta", "Southern Plains", "Mountain",
                            "Pacific", "US")
