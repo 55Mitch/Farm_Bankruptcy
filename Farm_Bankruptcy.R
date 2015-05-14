@@ -9,15 +9,18 @@ library(readxl)
 #library(RCurl)
 #library(xlsx)
 library(httr)
+
 ######################################################################################################
 ### Load in historical data
 #  Time series
-bkrpt.series =read.table("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/bnkrpt_history.txt")
+giturl1 <- "https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/bnkrpt_history.txt"
+bkrpt.series =read.table(giturl1)
 colnames(bkrpt.series) = c("Year", "Farms" ,"Sharecroppers", "FarmslessChare", "BankruptcyFiled",
                            "Bkrptpertenthou", "BkrptpertenthouExcl")
 # Regional Chapter 12
 # Appendix table 2--Chapter 12 farmer bankruptcy case filings by farm production region, 1986-2002
-reg.ch12= read.table("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/Reg_ch12.txt")
+giturl2 <- "https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/Reg_ch12.txt"
+reg.ch12= read.table(giturl2)
 colnames(reg.ch12) = c("Year", " Northeast " ,"Lake States", "Corn Belt", "Northern Plains",
                        "Appalachian", "Southeast", "Delta", "Southern Plains", "Mountain",
                            "Pacific", "US")
@@ -136,6 +139,17 @@ bkrpt.ch12 = rbind(old.bkrpt.ch12,new.bkrpt.ch12)
 #  Plot Chapter 12 since 1986
 library (ggplot2)
 ggplot(data=bkrpt.ch12, aes(x=Year, y=US)) +  theme_bw() + geom_line() + ylab("Chapter 12 Filings") 
+
+library(googleVis)
+lc <- gvisLineChart(bkrpt.ch12,
+                    options=list(
+                      legend="none",
+                      lineWidth=2, pointSize=0,
+                      title="Chapter 12 Bankruptcy Filings", 
+                      width=600, height=400)
+                      )
+
+plot(lc)
 #####################################################################################################
 ####### Calculate regional estimates
 
@@ -173,3 +187,48 @@ reg8.2013 = sum(file.2013[c(39,40,41,42,92,93,94)])
 reg9.2013 = sum(file.2013[c(74,80,81,82,89,91,95,96)])
 reg10.2013 = sum(file.2013[c(73,75,76,77,78,79,83,84,85)])
 
+reg1.2012 = sum(file.2012[c(3,9,16,24)])
+reg2.2012 = sum(file.2012[c(46,47,59,60,66)])
+reg3.2012 = sum(file.2012[c(48,49,54,55,56,57,58,64,65,67,68)])
+reg4.2012 = sum(file.2012[c(69,70,71,90)])
+reg5.2012 = sum(file.2012[c(25,26,27,29,30,31,32,44,45,50,51,52)])
+reg6.2012 = sum(file.2012[c(28,97)])
+reg7.2012 = sum(file.2012[c(34,35,36,37,38,62,63)])
+reg8.2012 = sum(file.2012[c(39,40,41,42,92,93,94)])
+reg9.2012 = sum(file.2012[c(74,80,81,82,89,91,95,96)])
+reg10.2012 = sum(file.2012[c(73,75,76,77,78,79,83,84,85)])
+
+reg1.2011 = sum(file.2011[c(3,9,16,24)])
+reg2.2011 = sum(file.2011[c(46,47,59,60,66)])
+reg3.2011 = sum(file.2011[c(48,49,54,55,56,57,58,64,65,67,68)])
+reg4.2011 = sum(file.2011[c(69,70,71,90)])
+reg5.2011 = sum(file.2011[c(25,26,27,29,30,31,32,44,45,50,51,52)])
+reg6.2011 = sum(file.2011[c(28,97)])
+reg7.2011 = sum(file.2011[c(34,35,36,37,38,62,63)])
+reg8.2011 = sum(file.2011[c(39,40,41,42,92,93,94)])
+reg9.2011 = sum(file.2011[c(74,80,81,82,89,91,95,96)])
+reg10.2011 = sum(file.2011[c(73,75,76,77,78,79,83,84,85)])
+
+reg1.2010 = sum(file.2010[c(3,9,16,24)])
+reg2.2010 = sum(file.2010[c(46,47,59,60,66)])
+reg3.2010 = sum(file.2010[c(48,49,54,55,56,57,58,64,65,67,68)])
+reg4.2010 = sum(file.2010[c(69,70,71,90)])
+reg5.2010 = sum(file.2010[c(25,26,27,29,30,31,32,44,45,50,51,52)])
+reg6.2010 = sum(file.2010[c(28,97)])
+reg7.2010 = sum(file.2010[c(34,35,36,37,38,62,63)])
+reg8.2010 = sum(file.2010[c(39,40,41,42,92,93,94)])
+reg9.2010 = sum(file.2010[c(74,80,81,82,89,91,95,96)])
+reg10.2010 = sum(file.2010[c(73,75,76,77,78,79,83,84,85)])
+
+#####################################################################################################
+
+NE = c(reg1.2010, reg1.2011,reg1.2012,reg1.2013,reg1.2014,reg1.2015)
+LS = c(reg2.2010, reg2.2011,reg2.2012,reg2.2013,reg2.2014,reg2.2015)
+CB = c(reg3.2010, reg3.2011,reg3.2012,reg3.2013,reg3.2014,reg3.2015)
+
+REG = as.data.frame(t(rbind(NE,LS,CB)))
+REG$Year = 2010:2015
+
+#####################################################################################################
+Column <- gvisColumnChart(REG,xvar="Year", yvar=c("NE","LS","CB") )
+plot(Column)
