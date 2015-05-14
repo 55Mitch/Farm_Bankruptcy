@@ -4,23 +4,24 @@
 #             http://nationalaglawcenter.org/wp-content/uploads/assets/crs/RS20742.pdf
 #  Data: http://www.uscourts.gov/statistics/table/f-2/bankruptcy-filings/2015/03/31
 ######################################################################################################
-#install.packages("readxl")
+install.packages("readxl")
 library(readxl)
-#library(RCurl)
-#library(xlsx)
+install.packages("httr")
 library(httr)
+install.packages("RCurl")
+library(RCurl)
 
 ######################################################################################################
 ### Load in historical data
 #  Time series
-giturl1 <- "https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/bnkrpt_history.txt"
-bkrpt.series =read.table(giturl1)
+giturl1 <- getURL("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/bnkrpt_history.txt")
+bkrpt.series =read.table(text=giturl1)
 colnames(bkrpt.series) = c("Year", "Farms" ,"Sharecroppers", "FarmslessChare", "BankruptcyFiled",
                            "Bkrptpertenthou", "BkrptpertenthouExcl")
 # Regional Chapter 12
 # Appendix table 2--Chapter 12 farmer bankruptcy case filings by farm production region, 1986-2002
-giturl2 <- "https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/Reg_ch12.txt"
-reg.ch12= read.table(giturl2)
+giturl2 <- getURL("https://raw.githubusercontent.com/55Mitch/Farm_Bankruptcy/master/Reg_ch12.txt")
+reg.ch12= read.table(text=giturl2)
 colnames(reg.ch12) = c("Year", " Northeast " ,"Lake States", "Corn Belt", "Northern Plains",
                        "Appalachian", "Southeast", "Delta", "Southern Plains", "Mountain",
                            "Pacific", "US")
@@ -137,10 +138,15 @@ bkrpt.ch12 = rbind(old.bkrpt.ch12,new.bkrpt.ch12)
 
 ######################################################################################################
 #  Plot Chapter 12 since 1986
+install.packages("ggplot2")
 library (ggplot2)
+
 ggplot(data=bkrpt.ch12, aes(x=Year, y=US)) +  theme_bw() + geom_line() + ylab("Chapter 12 Filings") 
 
+###  How does googleVis work in Sense?????? ##########################################################
+install.packages("googleVis")
 library(googleVis)
+
 lc <- gvisLineChart(bkrpt.ch12,
                     options=list(
                       legend="none",
